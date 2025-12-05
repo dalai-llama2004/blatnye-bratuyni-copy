@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from .models import Base
+from models import Base
 import os
 
 DATABASE_URL = os.getenv("NOTIFICATION_DB_URL", "postgresql://notifier:password@notification-db:5432/notif_db")

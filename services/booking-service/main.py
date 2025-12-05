@@ -2,11 +2,11 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
-from .routes import router as user_router
-from .admin import router as admin_router
+from routes import router as user_router
+from admin import router as admin_router
 
-from .db import engine
-from .models import Base
+from db import engine
+from models import Base
 
 
 @asynccontextmanager

@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import date, datetime
 from typing import List, Optional
 
-from .security import get_current_user_id
+from security import get_current_user_id
 
 from fastapi import (
     APIRouter,
@@ -15,8 +15,9 @@ from fastapi import (
 )
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from . import crud, schemas
-from .db import get_session
+import crud
+import schemas
+from db import get_session
 
 router = APIRouter(tags=["booking"])
 

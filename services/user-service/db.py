@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from .models import Base
 import os
 
-DATABASE_URL = os.getenv("USER_DB_URL", "postgresql://user:password@user-db:5432/user_db")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@user-db:5432/user_db")
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

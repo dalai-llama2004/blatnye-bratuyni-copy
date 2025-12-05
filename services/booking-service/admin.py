@@ -11,9 +11,10 @@ from fastapi import (
 )
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from . import crud, schemas
-from .db import get_session
-from .security import require_admin
+import crud
+import schemas
+from db import get_session
+from security import require_admin
 
 
 router = APIRouter(prefix="/admin", tags=["admin"])

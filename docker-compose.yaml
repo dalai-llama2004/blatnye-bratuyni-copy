@@ -36,6 +36,48 @@ services:
     volumes:
       - ./pgdata/notification:/var/lib/postgresql/data
 
+  user-service:
+    build: ./services/user-service
+    container_name: user-service
+    environment:
+      - DATABASE_URL=postgresql://user:password@user-db:5432/user_db
+    depends_on:
+      - user-db
+    ports:
+      - "8001:8001"
+    restart: unless-stopped
+
+  booking-service:
+    build: ./services/booking-service
+    container_name: booking-service
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://booking_user:password@booking-db:5432/booking_db
+    depends_on:
+      - booking-db
+    ports:
+      - "8002:8002"
+    restart: unless-stopped
+
+  notification-service:
+    build: ./services/notification-service
+    container_name: notification-service
+    environment:
+      - DATABASE_URL=postgresql://notifier:password@notification-db:5432/notif_db
+    depends_on:
+      - notification-db
+    ports:
+      - "8003:8003"
+
+  api-gateway:
+    build: ./services/api-gateway
+    container_name: api-gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - user-service
+      - booking-service
+      - notification-service
+
   frontend:
     build: ./services/frontend
     container_name: coworking-frontend
