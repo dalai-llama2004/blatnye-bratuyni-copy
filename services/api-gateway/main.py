@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import user, booking, notification
+from routes import user, booking, notification, admin
 
 app = FastAPI(
     title="API Gateway",
@@ -20,9 +20,10 @@ app.add_middleware(
 # ------------------------------------------------------------------------------
 
 # Подключаем роуты, проксирующие бизнес-логику дальше
-app.include_router(user.router, prefix="/users")
-app.include_router(booking.router, prefix="/bookings")
-app.include_router(notification.router, prefix="/notifications")
+app.include_router(user.router, prefix="/users", tags=["users"])
+app.include_router(booking.router, prefix="/bookings", tags=["bookings"])
+app.include_router(notification.router, prefix="/notifications", tags=["notifications"])
+app.include_router(admin.router, prefix="/admin", tags=["admin"])
 
 @app.get("/")
 async def root():
