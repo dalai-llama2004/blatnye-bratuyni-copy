@@ -1,9 +1,13 @@
 import pytest
+from unittest.mock import patch
 from crud import create_user, confirm_user, get_user_by_email, create_recovery_code, reset_password
 
 
-def test_user_registration(test_client, test_db):
+@patch('crud.send_email')
+def test_user_registration(mock_send_email, test_client, test_db):
     """Test user registration endpoint"""
+    mock_send_email.return_value = None
+    
     response = test_client.post(
         "/users/register",
         json={
@@ -23,8 +27,11 @@ def test_user_registration(test_client, test_db):
     assert user.confirmed is False
 
 
-def test_email_confirmation(test_client, test_db):
+@patch('crud.send_email')
+def test_email_confirmation(mock_send_email, test_client, test_db):
     """Test email confirmation endpoint"""
+    mock_send_email.return_value = None
+    
     # Create a user
     create_user(test_db, "Test User", "test@example.com", "password123")
     user = get_user_by_email(test_db, "test@example.com")
@@ -45,8 +52,11 @@ def test_email_confirmation(test_client, test_db):
     assert user.confirmed is True
 
 
-def test_user_login_success(test_client, test_db):
+@patch('crud.send_email')
+def test_user_login_success(mock_send_email, test_client, test_db):
     """Test successful user login"""
+    mock_send_email.return_value = None
+    
     # Create and confirm a user
     create_user(test_db, "Test User", "test@example.com", "password123")
     user = get_user_by_email(test_db, "test@example.com")
@@ -66,8 +76,11 @@ def test_user_login_success(test_client, test_db):
     assert data["token_type"] == "bearer"
 
 
-def test_user_login_invalid_credentials(test_client, test_db):
+@patch('crud.send_email')
+def test_user_login_invalid_credentials(mock_send_email, test_client, test_db):
     """Test login with invalid credentials"""
+    mock_send_email.return_value = None
+    
     # Create and confirm a user
     create_user(test_db, "Test User", "test@example.com", "password123")
     user = get_user_by_email(test_db, "test@example.com")
@@ -84,8 +97,11 @@ def test_user_login_invalid_credentials(test_client, test_db):
     assert response.status_code == 401
 
 
-def test_user_login_unconfirmed(test_client, test_db):
+@patch('crud.send_email')
+def test_user_login_unconfirmed(mock_send_email, test_client, test_db):
     """Test login with unconfirmed email"""
+    mock_send_email.return_value = None
+    
     # Create a user but don't confirm
     create_user(test_db, "Test User", "test@example.com", "password123")
     
@@ -100,8 +116,11 @@ def test_user_login_unconfirmed(test_client, test_db):
     assert response.status_code == 403
 
 
-def test_password_recovery(test_client, test_db):
+@patch('crud.send_email')
+def test_password_recovery(mock_send_email, test_client, test_db):
     """Test password recovery flow"""
+    mock_send_email.return_value = None
+    
     # Create and confirm a user
     create_user(test_db, "Test User", "test@example.com", "password123")
     user = get_user_by_email(test_db, "test@example.com")
@@ -140,8 +159,11 @@ def test_password_recovery(test_client, test_db):
     assert response.status_code == 200
 
 
-def test_duplicate_email_registration(test_client, test_db):
+@patch('crud.send_email')
+def test_duplicate_email_registration(mock_send_email, test_client, test_db):
     """Test that duplicate email registration is rejected"""
+    mock_send_email.return_value = None
+    
     # Create first user
     response = test_client.post(
         "/users/register",

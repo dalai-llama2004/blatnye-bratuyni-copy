@@ -8,8 +8,7 @@ from pydantic import BaseModel, Field
 # Базовый класс для всех выходных схем (включает orm_mode)
 # ------------------------------------------------------------
 class ORMBase(BaseModel):
-    class Config:
-        from_attributes = True  # FastAPI + SQLAlchemy 2.0-friendly
+    model_config = {"from_attributes": True}  # FastAPI + SQLAlchemy 2.0-friendly
 
 
 # ============================================================
@@ -17,8 +16,8 @@ class ORMBase(BaseModel):
 # ============================================================
 
 class ZoneBase(BaseModel):
-    name: str = Field(..., example="Главный коворкинг")
-    address: Optional[str] = Field(None, example="пр. Гагарина 15")
+    name: str = Field(..., json_schema_extra={"example": "Главный коворкинг"})
+    address: Optional[str] = Field(None, json_schema_extra={"example": "пр. Гагарина 15"})
     is_active: bool = True
 
 
@@ -117,6 +116,6 @@ class BookingOut(ORMBase):
 # ============================================================
 
 class ZoneCloseRequest(BaseModel):
-    reason: str = Field(..., example="Плановая уборка")
-    from_time: datetime = Field(..., example="2025-02-01T10:00:00")
-    to_time: datetime = Field(..., example="2025-02-01T18:00:00")
+    reason: str = Field(..., json_schema_extra={"example": "Плановая уборка"})
+    from_time: datetime = Field(..., json_schema_extra={"example": "2025-02-01T10:00:00"})
+    to_time: datetime = Field(..., json_schema_extra={"example": "2025-02-01T18:00:00"})

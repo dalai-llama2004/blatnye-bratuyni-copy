@@ -322,7 +322,7 @@ async def update_zone(
         return None
 
     # Обновляем только те поля, которые переданы
-    update_data = data.dict(exclude_unset=True)
+    update_data = data.model_dump(exclude_unset=True)
     for field, value in update_data.items():
         setattr(zone, field, value)
 
