@@ -63,7 +63,7 @@ def login(data: LoginModel, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     if not user.confirmed:
         raise HTTPException(status_code=403, detail="Email not confirmed")
-    token = create_access_token({"user_id": user.id})
+    token = create_access_token({"user_id": user.id, "role": user.role})
     return {"access_token": token, "token_type": "bearer"}
 
 @router.post("/users/recover")
